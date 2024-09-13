@@ -3,26 +3,48 @@ import Form from 'react-bootstrap/Form';
 import TopBar from "./TopBar";
 import { BookSchema } from "../Schema/Schema";
 import Button from 'react-bootstrap/Button';
-import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { editedbookDetails } from "../API/APIBook";
 
 
 function EditBook({books,setBooks}){
-    
+
+  const navigate = useNavigate();  
     const {id} = useParams();
-    useEffect(()=>{
-      const selectedbook = books.filter((val)=> val.id == id);
-      console.log(selectedbook);
-    })
-    const {values,handleChange,handleSubmit,handleBlur} = useFormik({
-      initialValues: {
+    let  initialValues = {
       title_name: "",
       author_name: "",
       isbn_number: "",
       publication_date: "",
-        },
+        };
+        const selectedbook = books.filter((val)=> val.id == id);
+        const selectedbookindex = books.findIndex((val)=>val.id == id);
+
+     const {values,handleChange,handleSubmit,handleBlur} = useFormik({
+     initialValues : selectedbook ? {...selectedbook[0]} :{...initialValues},
         validationSchema: BookSchema,
+        onSubmit : (editedBook)=>{
+          updateEditedBook(id,editedBook);
+        }
+
+        // onSubmit: (data)=>{
+        //   const updatedBook = JSON.parse(JSON.stringify(books))
+        //   updatedBook[selectedbookindex] = data;
+        //   setBooks([...updatedBook])
+        //   navigate("/");
+        // }
     })
+
+    const updateEditedBook = (id,editedBook) =>{
+      editedbookDetails(editedBook).then((data)=>{
+        if(data){
+          setBooks([...books,editedBook]);
+          navigate("/")
+        }
+      })
+    }
+
+    
     return (
         <>
         <TopBar/>

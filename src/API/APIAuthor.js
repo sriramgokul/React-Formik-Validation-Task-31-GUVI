@@ -12,3 +12,14 @@ export async function addnewAuthor(newAuthor){
         const data = await res.json();
         return data;
 }
+
+export async function deleteAuthors(id){
+   const res = await fetch(`${APIAuthor}/${id}`,{
+        method: "DELETE",
+        headers: {
+            "Content-type":"application/json",
+        }
+    })
+    const data = await res.json()
+    return data;
+}

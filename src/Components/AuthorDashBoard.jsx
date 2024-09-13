@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import { useNavigate } from "react-router-dom";
 import { APIAuthor } from "../API/APIAuthor";
+import { deleteAuthors } from "../API/APIAuthor";
 
 
 function AuthorDashBoard({author,setAuthor}){
@@ -12,9 +13,33 @@ function AuthorDashBoard({author,setAuthor}){
     useEffect(()=>{
         fetch(APIAuthor)
         .then((res)=> res.json())
-        .then((data)=>setAuthor(data))
+        .then((data)=>handlepopulate(data))
+      
         .catch((err)=> console.log("Sorry there has been Error Occurred",err))
     },[author])
+
+    function handlepopulate(data){
+      data.map((val,id)=>{
+        console.log(val.authors_name);
+      })
+    }
+
+    function handleEdit(id){
+      navigate(`/editAuthor/${id}`)
+    }
+
+    // To delete it in API
+    function handleDelete(id){
+      deleteAuthors(id).then((data)=>{
+        if(data){
+          const remainingAuthors = author.filter((val)=> val.id != id)
+          setAuthor([...remainingAuthors]);
+        }else{
+          console.log("Sorry Error has Occurred")
+        }
+      })
+      
+    }
 
     return(
         <div>
@@ -29,8 +54,8 @@ function AuthorDashBoard({author,setAuthor}){
         <tr>
           <th>Sl.No</th>
           <th>Athor's Name</th>
-          <th>Date of Birth</th>
           <th>Biography</th>
+          <th>Date of Birth</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -43,8 +68,8 @@ function AuthorDashBoard({author,setAuthor}){
           <td>{val.authorBio}</td>
           <td>{val.dateof_birth}</td>
           <td className='d-flex justify-content-between align-items-center'>
-          <Button variant="info">Edit</Button>
-          <Button variant="danger">Delte</Button>
+          <Button variant="info" onClick={()=> handleEdit(val.id)}>Edit</Button>
+          <Button variant="danger" onClick={()=>handleDelete(val.id)}>Delete</Button>
           </td>
         </tr>
          ))   
@@ -62,3 +87,13 @@ function AuthorDashBoard({author,setAuthor}){
 }
 
 export default AuthorDashBoard;
+
+// const [values, setValues] = React.useState({});
+
+// const handleChange = event => {
+//   setValues(prevValues => ({
+//     ...prevValues,
+//     // we use the name to tell Formik which key of `values` to update
+//     [event.target.name]: event.target.value
+//   });
+// }

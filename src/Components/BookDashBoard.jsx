@@ -3,7 +3,7 @@ import TopBar from "./TopBar";
 import Table from 'react-bootstrap/Table';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { APIBook } from '../API/APIBook';
+import { APIBook, deleteBookDetails } from '../API/APIBook';
 
 
 function BookDashBoard({books,setBooks}){
@@ -19,6 +19,16 @@ function BookDashBoard({books,setBooks}){
 
   function handleEdit(id){
     navigate(`/editbook/${id}`)
+  }
+  function handleDelete(id){
+    deleteBookDetails(id).then((data)=>{
+      if(data){
+        const remainingBooks = books.filter((val)=> val.id != id)
+        setBooks([...remainingBooks])
+      }else{
+        console.log("Error Deleting Data")
+      }
+    })
   }
     return(
         <div>
@@ -50,7 +60,7 @@ function BookDashBoard({books,setBooks}){
           <td>{val.publication_date}</td>
           <td className='d-flex justify-content-evenly'>
           <Button variant="info" onClick={()=>handleEdit(val.id)}>Edit</Button>
-          <Button variant="danger">Delte</Button>
+          <Button variant="danger" onClick={()=> handleDelete(val.id)}>Delte</Button>
           </td>
         </tr>
          ))   
