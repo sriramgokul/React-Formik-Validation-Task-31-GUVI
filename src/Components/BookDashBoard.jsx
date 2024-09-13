@@ -16,6 +16,10 @@ function BookDashBoard({books,setBooks}){
         .then((data)=>setBooks(data))
         .catch((err)=>console.log("Sorry a error has been Occured",err))
   },[books])
+
+  function handleEdit(id){
+    navigate(`/editbook/${id}`)
+  }
     return(
         <div>
             <TopBar/>
@@ -45,7 +49,7 @@ function BookDashBoard({books,setBooks}){
           <td>{val.isbn_number}</td>
           <td>{val.publication_date}</td>
           <td className='d-flex justify-content-evenly'>
-          <Button variant="info" onClick={()=>navigate("/editbook")}>Edit</Button>
+          <Button variant="info" onClick={()=>handleEdit(val.id)}>Edit</Button>
           <Button variant="danger">Delte</Button>
           </td>
         </tr>

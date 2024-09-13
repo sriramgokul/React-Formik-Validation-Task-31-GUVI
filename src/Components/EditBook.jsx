@@ -3,10 +3,17 @@ import Form from 'react-bootstrap/Form';
 import TopBar from "./TopBar";
 import { BookSchema } from "../Schema/Schema";
 import Button from 'react-bootstrap/Button';
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 
 function EditBook({books,setBooks}){
     
+    const {id} = useParams();
+    useEffect(()=>{
+      const selectedbook = books.filter((val)=> val.id == id);
+      console.log(selectedbook);
+    })
     const {values,handleChange,handleSubmit,handleBlur} = useFormik({
       initialValues: {
       title_name: "",

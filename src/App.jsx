@@ -20,7 +20,7 @@ function App() {
         <Route path='/addbooks' element={<AddBooks books={books} setBooks={setBooks}/>}/>
         <Route path={"/authorDashboard"} element={<AuthorDashBoard author={author} setAuthor={setAuthor}/>}/>
         <Route path='/addauthor' element={<AddAuthor author={author} setAuthor={setAuthor}/>}/>
-        <Route path="/editbook" element={<EditBook books={books} setBooks={setBooks}/>}/>
+        <Route path="/editbook/:id" element={<EditBook books={books} setBooks={setBooks}/>}/>
       </Routes>
       </BrowserRouter>
       

@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 function AddAuthor({author,setAuthor}){
   const navigate = useNavigate();
-  const {values,handleChange,handleSubmit,handleBlur} = useFormik({
+  const {values,handleChange,handleSubmit,handleBlur,errors} = useFormik({
     initialValues: {
       authors_name: "",
       authorBio:"",
@@ -37,16 +37,19 @@ function AddAuthor({author,setAuthor}){
       <Form.Group className="mb-3" >
         <Form.Label><b>Author's Name:</b></Form.Label>
         <Form.Control type="text" placeholder="Enter the Author Name" name="authors_name" value={values.authors_name} onChange={handleChange} onBlur={handleBlur} />
+        {errors.authors_name? <div className='text-danger'>{errors.authors_name}</div>: ""}
       </Form.Group>
 
       <Form.Group className="mb-3" >
-        <Form.Label><b>Biography.</b></Form.Label>
+        <Form.Label><b>Biography</b></Form.Label>
         <Form.Control type="text" placeholder="Write a short Biography about the Author" name="authorBio" value={values.authorBio} onChange={handleChange} onBlur={handleBlur}  />
+        {errors.authorBio? <div className='text-danger'>{errors.authorBio}</div> : ""}
       </Form.Group>
 
       <Form.Group className="mb-3" >
         <Form.Label><b>Date of Birth</b></Form.Label>
         <Form.Control type="date" id='date' placeholder="Enter Published Date" name="dateof_birth" value={values.dateof_birth} onChange={handleChange} onBlur={handleBlur} />
+        {errors.dateof_birth ? <div className='text-danger'>{errors.dateof_birth}</div>:" "}
       </Form.Group>
       
       <Button variant="primary" type="submit">
