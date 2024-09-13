@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import TopBar from "./TopBar";
 import { BookSchema } from "../Schema/Schema";
 import Button from 'react-bootstrap/Button';
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { editedbookDetails } from "../API/APIBook";
 
 
@@ -11,6 +11,7 @@ function EditBook({books,setBooks}){
 
   const navigate = useNavigate();  
     const {id} = useParams();
+
     let  initialValues = {
       title_name: "",
       author_name: "",
@@ -18,25 +19,18 @@ function EditBook({books,setBooks}){
       publication_date: "",
         };
         const selectedbook = books.filter((val)=> val.id == id);
-        const selectedbookindex = books.findIndex((val)=>val.id == id);
-
-     const {values,handleChange,handleSubmit,handleBlur} = useFormik({
+        console.log(selectedbook);
+     const {values,handleChange,handleSubmit,handleBlur,errors} = useFormik({
      initialValues : selectedbook ? {...selectedbook[0]} :{...initialValues},
         validationSchema: BookSchema,
         onSubmit : (editedBook)=>{
           updateEditedBook(id,editedBook);
         }
 
-        // onSubmit: (data)=>{
-        //   const updatedBook = JSON.parse(JSON.stringify(books))
-        //   updatedBook[selectedbookindex] = data;
-        //   setBooks([...updatedBook])
-        //   navigate("/");
-        // }
     })
 
     const updateEditedBook = (id,editedBook) =>{
-      editedbookDetails(editedBook).then((data)=>{
+      editedbookDetails(id,editedBook).then((data)=>{
         if(data){
           setBooks([...books,editedBook]);
           navigate("/")
@@ -53,22 +47,26 @@ function EditBook({books,setBooks}){
       <Form.Group className="mb-3">
         <Form.Label><b>Title</b></Form.Label>
         <Form.Control type="text" placeholder="Enter the title of the book" value={values.title_name} name="title_name" onChange={handleChange} onBlur={handleBlur} />
+        {errors.title_name ? <div className='text-danger'>{errors.title_name}</div>: " "}
       </Form.Group>
       
 
       <Form.Group className="mb-3">
         <Form.Label><b>Author</b></Form.Label>
         <Form.Control type="text" placeholder="Enter the Author Name" value={values.author_name} name="author_name" onChange={handleChange} onBlur={handleBlur} />
+        {errors.author_name ? <div className='text-danger'>{errors.author_name}</div>: " "}
       </Form.Group>
 
       <Form.Group className="mb-3">
         <Form.Label><b>ISBN Number</b></Form.Label>
-        <Form.Control type="number" placeholder="Enter the ISBN Number" value={values.isbn_number} name="isbn_number" onChange={handleChange} onBlur={handleBlur} />
+        <Form.Control type="text" placeholder="Enter the ISBN Number" value={values.isbn_number} name="isbn_number" onChange={handleChange} onBlur={handleBlur} />
+        {errors.isbn_number ? <div className='text-danger'>{errors.isbn_number}</div>: ""}
       </Form.Group>
 
       <Form.Group className="mb-3">
         <Form.Label><b>Publication date</b></Form.Label>
         <Form.Control type="date" id='date' placeholder="Enter Published Date" value={values.publication_date} name="publication_date" onChange={handleChange} onBlur={handleBlur}  />
+        {errors.publication_date ? <div className='text-danger'>{errors.publication_date}</div>: " "}
       </Form.Group>
       
       <Button variant="primary" type="submit">Submit</Button>

@@ -9,20 +9,16 @@ import { deleteAuthors } from "../API/APIAuthor";
 
 function AuthorDashBoard({author,setAuthor}){
     const navigate = useNavigate();
-
+    
+  // fetching data from API
     useEffect(()=>{
         fetch(APIAuthor)
         .then((res)=> res.json())
-        .then((data)=>handlepopulate(data))
-      
+        .then((data)=>setAuthor(data))
         .catch((err)=> console.log("Sorry there has been Error Occurred",err))
     },[author])
 
-    function handlepopulate(data){
-      data.map((val,id)=>{
-        console.log(val.authors_name);
-      })
-    }
+  
 
     function handleEdit(id){
       navigate(`/editAuthor/${id}`)

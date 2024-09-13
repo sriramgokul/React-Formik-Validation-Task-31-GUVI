@@ -23,3 +23,15 @@ export async function deleteAuthors(id){
     const data = await res.json()
     return data;
 }
+
+export async function editedAuthorDetails(id,editAuthor){
+        const res = await fetch(`${APIAuthor}/${id}`,{
+            method: "PUT",
+            body: JSON.stringify(editAuthor),
+            headers : {
+                "Content-type" : "application/json",
+            }
+        })
+        const data = await res.json();
+        return data;
+}

@@ -3,18 +3,37 @@ import Form from 'react-bootstrap/Form';
 import TopBar from './TopBar';
 import { useFormik } from 'formik';
 import { AuthorSchema } from '../Schema/Schema';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { editedAuthorDetails } from '../API/APIAuthor';
 
 function EditAuthor({author,setAuthor}){
-    const {id} = useParams();
+
+  const navigate = useNavigate();
+  const {id} = useParams();
+
+    let initialValues = {
+      authors_name: "",
+      authorBio:"",
+      dateof_birth: "",
+    };
+    const selectedAuthor = author.filter((val)=>val.id == id);
+    console.log(selectedAuthor);
     const {values,handleChange,handleSubmit,handleBlur,errors} = useFormik({
-        initialValues: {
-            authors_name: "",
-            authorBio:"",
-            dateof_birth: "",
-          },
-          validationSchema: AuthorSchema,
+    initialValues : selectedAuthor ? {...selectedAuthor[0]} : {...initialValues},   
+     validationSchema: AuthorSchema,
+     onSubmit : (editedAuthor)=>{
+        updateEditedAuthor(id,editedAuthor);
+     }
     })
+
+    const updateEditedAuthor = (id,editedAuthor) =>{
+      editedAuthorDetails(id,editedAuthor).then((data)=>{
+        if(data){
+          setAuthor([...author,editedAuthor]);
+          navigate("/authorDashboard")
+        }
+      })
+    }
     return (
         <>
         <TopBar/>

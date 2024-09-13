@@ -54,7 +54,7 @@ function AddBooks({books,setBooks}){
 
       <Form.Group className="mb-3">
         <Form.Label><b>ISBN Number</b></Form.Label>
-        <Form.Control type="number" placeholder="Enter the ISBN Number" value={values.isbn_number} name="isbn_number" onChange={handleChange} onBlur={handleBlur} />
+        <Form.Control type="text" placeholder="Enter the ISBN Number" value={values.isbn_number} name="isbn_number" onChange={handleChange} onBlur={handleBlur} />
       {errors.isbn_number ? <div className='text-danger'>{errors.isbn_number}</div>: ""}
       </Form.Group>
 
